@@ -2,11 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Mafia Auto Name" Height="677" Width="525" Background="Bisque">
-    
+
     <Window.Resources>
         <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
         <Style TargetType="Label">
             <Setter Property="Width" Value="100" />
@@ -17,128 +17,174 @@
             <Setter Property="Height" Value="25" />
         </Style>
     </Window.Resources>
-    
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
 
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Player name section -->
-        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+        <TabControl Grid.Row="0" Background="Bisque">
+            <TabItem Header="Player Setup">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Content="Player Name: " />
-            <TextBox Name="NewNameTextBox" Grid.Row="0" Grid.Column="1" Width="200" />
+                    <Label Grid.Row="0" Grid.Column="0" Content="Player Name: " />
+                    <TextBox Name="NewNameTextBox" Grid.Row="0" Grid.Column="1" Width="200" />
 
-            <Button Name="AddNameButton" IsDefault="True" Content="_Add" Grid.Row="0" Grid.Column="2"
-                    HorizontalAlignment="Left" Width="75" Click="AddNameButton_OnClick" />
+                    <Button Name="AddNameButton" IsDefault="True" Content="_Add" Grid.Row="0" Grid.Column="2"
+                            HorizontalAlignment="Left" Width="75" Click="AddNameButton_OnClick" />
 
-            <Label Grid.Row="1" Grid.Column="0" Content="Players:" VerticalAlignment="Top" />
-            <ListView Name="NamesListView" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5" />
+                    <Label Grid.Row="1" Grid.Column="0" Content="Players:" VerticalAlignment="Top" />
+                    <ListView Name="NamesListView" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch"
+                              Margin="5" />
 
-            <Button Name="RemoveButton" Content="Remove" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left"
-                    VerticalAlignment="Top" Width="75" Click="RemoveButton_Click" />
-        </Grid>
-
-        <!-- Rows and columns section-->
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Label Content="Rows:" Grid.Row="0" Grid.Column="0" />
-            <TextBox Name="RowsTextBox" Grid.Row="0" Grid.Column="1" Width="120" />
-
-            <Label Content="Columns:" Grid.Row="0" Grid.Column="2"/>
-             
-            <TextBox Name="ColumnsTextBox" Grid.Row="0" Grid.Column="3" Width="120" />
-        </Grid>
-
-        <!-- Image margins section -->
-        <Grid Grid.Row="2" Grid.Column="0" Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Label Content="Image Margins:" Grid.Row="0" Grid.Column="0"/>
+                    <Button Name="RemoveButton" Content="Remove" Grid.Row="1" Grid.Column="2"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top" Width="75" Click="RemoveButton_Click" />
+                </Grid>
+            </TabItem>
             
-            <Label Content="Top:" Grid.Row="1" Grid.Column="0"/>
-            <TextBox x:Name="ImageMarginTopTextBox" Grid.Row="1" Grid.Column="1" Width="120" />
-            
-            <Label Content="Bottom:" Grid.Row="2" Grid.Column="0"/>
-            <TextBox x:Name="ImageMarginRightTextBox" Grid.Row="2" Grid.Column="1" Width="120" />
-            
-            <Label Content="Left:" Grid.Row="3" Grid.Column="0"/>
-            <TextBox x:Name="ImageMarginBottomTextBox" Grid.Row="3" Grid.Column="1" Width="120" />
-            
-            <Label Content="Right:" Grid.Row="4" Grid.Column="0"/>
-            <TextBox x:Name="ImageMarginLeftTextBox" Grid.Row="4" Grid.Column="1" Width="120" />
+            <TabItem Header="Settings">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
 
-        </Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-        <!-- Portrait margins section -->
-        <Grid Grid.Row="2" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                    <!-- Rows and columns section-->
+                    <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            
-            <Label Content="Portrait Spacing:" Grid.Row="0" Grid.Column="0"/>
-            
-            <Label Content="Vertical:" Grid.Row="1" Grid.Column="0"/>
-            <TextBox x:Name="PortraitSpacingVerticalTextBox" Grid.Row="1" Grid.Column="1" Width="120" />
-            
-            <Label Content="Horizontal:" Grid.Row="2" Grid.Column="0"/>
-            <TextBox x:Name="PortraitSpacingHorizontalTextBox" Grid.Row="2" Grid.Column="1" Width="120" />
-        </Grid>
+                        <Label Content="Rows:" Grid.Column="0" />
+                        <TextBox Name="RowsTextBox" Grid.Column="1" Width="120" />
 
-        <!-- Font and color settings -->
-        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-            <Button x:Name="FontButton" Content="_Font..." HorizontalAlignment="Left" VerticalAlignment="Top"
-                    Width="75" Click="FontButton_Click" />
-        </Grid>
+                        <Label Content="Columns:" Grid.Column="2" />
 
-        <Button Name="GenerateButton" Content="_Save" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="1"
+                        <TextBox Name="ColumnsTextBox" Grid.Column="3" Width="120" />
+                    </Grid>
+                    
+                    <!-- Select input image or generate blank -->
+                    <Grid Grid.Row="0" Grid.Column="0" ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Label Content="Input Image:" Grid.Row="0" Grid.Column="0" />
+                        <TextBox x:Name="InputImageLocationTextBox" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0"/>
+                        <Button x:Name="InputImageLocationBrowseButton" Content="_Browse..." Grid.Row="1" Grid.Column="1" Click="InputImageLocationBrowseButton_Click"/>
+                        
+                    </Grid>
+                          
+                    <!-- Select save location -->
+                    <Grid Grid.Row="1" Grid.Column="0" ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="Ouput Image:" Grid.Row="0" Grid.Column="0" />
+                        <TextBox x:Name="OutputImageLocationTextBox" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0"/>
+                        <Button x:Name="OutputImageLocationBrowseButton" Content="_Browse..." Grid.Row="1" Grid.Column="1" Click="OutputImageLocationBrowseButton_Click"/>
+                    </Grid>
+
+                    <!-- Image margins section -->
+                    <Grid Grid.Row="3" Grid.Column="0" Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="Image Margins:" Grid.Row="0" Grid.Column="0" />
+
+                        <Label Content="Top:" Grid.Row="1" Grid.Column="0" />
+                        <TextBox x:Name="ImageMarginTopTextBox" Grid.Row="1" Grid.Column="1" Width="120" />
+
+                        <Label Content="Bottom:" Grid.Row="2" Grid.Column="0" />
+                        <TextBox x:Name="ImageMarginRightTextBox" Grid.Row="2" Grid.Column="1" Width="120" />
+
+                        <Label Content="Left:" Grid.Row="3" Grid.Column="0" />
+                        <TextBox x:Name="ImageMarginBottomTextBox" Grid.Row="3" Grid.Column="1" Width="120" />
+
+                        <Label Content="Right:" Grid.Row="4" Grid.Column="0" />
+                        <TextBox x:Name="ImageMarginLeftTextBox" Grid.Row="4" Grid.Column="1" Width="120" />
+
+                    </Grid>
+
+                    <!-- Portrait margins section -->
+                    <Grid Grid.Row="3" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="Portrait Spacing:" Grid.Row="0" Grid.Column="0" />
+
+                        <Label Content="Vertical:" Grid.Row="1" Grid.Column="0" />
+                        <TextBox x:Name="PortraitSpacingVerticalTextBox" Grid.Row="1" Grid.Column="1" Width="120" />
+
+                        <Label Content="Horizontal:" Grid.Row="2" Grid.Column="0" />
+                        <TextBox x:Name="PortraitSpacingHorizontalTextBox" Grid.Row="2" Grid.Column="1" Width="120" />
+                    </Grid>
+
+                    <!-- Font and color settings -->
+                    <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Button x:Name="FontButton" Content="_Font..." HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Width="75" Click="FontButton_Click" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+
+        <Button Name="GenerateButton" Content="_Save" HorizontalAlignment="Right" Grid.Row="1"
                 Width="75" Click="GenerateButton_Click" />
 
 

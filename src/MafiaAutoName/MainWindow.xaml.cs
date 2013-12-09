@@ -41,7 +41,7 @@ namespace MafiaAutoName
 
         private void GenerateButton_Click(object sender, RoutedEventArgs e)
         {
-            var image = new Bitmap(@"F:\test.jpg");
+            var image = new Bitmap(InputImageLocationTextBox.Text);
             Graphics graphicImage = Graphics.FromImage(image);
 
             const int rows = 4;
@@ -103,7 +103,7 @@ namespace MafiaAutoName
                 }
             }
 
-            image.Save(@"F:\output.jpg", ImageFormat.Jpeg);
+            image.Save(OutputImageLocationTextBox.Text, ImageFormat.Jpeg);
 
             image.Dispose();
             graphicImage.Dispose();
@@ -127,6 +127,26 @@ namespace MafiaAutoName
             {
                 _displayFont = fd.Font;
             }
+        }
+
+        private void InputImageLocationBrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog {CheckFileExists = true, Filter = "JPEG (*.jpg)|*.jpg"};
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                InputImageLocationTextBox.Text = dialog.FileName;
+
+            dialog.Dispose();
+        }
+
+        private void OutputImageLocationBrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new SaveFileDialog {DefaultExt = ".jpg", CheckPathExists = true};
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                OutputImageLocationTextBox.Text = dialog.FileName;
+
+            dialog.Dispose();
         }
     }
 }
