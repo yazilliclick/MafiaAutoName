@@ -86,7 +86,10 @@ namespace MafiaAutoName
                 }
                 else
                 {
-                    int extraHorizontalMargin = (rows * columns - Names.Count) * (portraitWidth + portraitHorizontalMargins) / 2;
+                    // zoom.us will center portraits on last row unless there is only one missing then it will continue to follow grid pattern
+                    int extraHorizontalMargin = 0;
+                    if (rows * columns - Names.Count != 1)
+                        extraHorizontalMargin = (rows * columns - Names.Count) * (portraitWidth + portraitHorizontalMargins) / 2;
 
                     graphicImage.DrawString(Names[i], _displayFont,
                         new SolidBrush(Color.AntiqueWhite),
