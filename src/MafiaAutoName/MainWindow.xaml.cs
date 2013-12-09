@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -10,11 +11,122 @@ using Point = System.Drawing.Point;
 
 namespace MafiaAutoName
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         protected IList<String> Names;
         private ListViewDragDropManager<String> _dragManager;
         private Font _displayFont;
+
+        private string _outputFilePath = "";
+        private string _inputImagePath;
+        private int _rows;
+        private int _columns;
+        private int _imageLeftMargin;
+        private int _imageRightMargin;
+        private int _imageTopMargin;
+        private int _imageBottomMargin;
+        private int _portraitHorizontalMargins;
+        private int _portraitVerticalMargins;
+
+        public string OutputImagePath
+        {
+            get { return _outputFilePath;  }
+            set
+            {
+                _outputFilePath = value;
+                OnPropertyChanged("OutputImagePath");
+            }
+        }
+
+        public string InputImagePath
+        {
+            get { return _inputImagePath; }
+            set
+            {
+                _inputImagePath = value;
+                OnPropertyChanged("InputImagePath");
+            }
+        }
+
+        public int Rows
+        {
+            get { return _rows; }
+            set
+            {
+                _rows = value;
+                OnPropertyChanged("Rows");
+            }
+        }
+
+        public int Columns
+        {
+            get { return _columns; }
+            set
+            {
+                _columns = value;
+                OnPropertyChanged("Columns");
+            }
+        }
+
+        public int ImageLeftMargin
+        {
+            get { return _imageLeftMargin; }
+            set
+            {
+                _imageLeftMargin = value;
+                OnPropertyChanged("ImageLeftMargin");
+            }
+        }
+
+        public int ImageRightMargin
+        {
+            get { return _imageRightMargin; }
+            set
+            {
+                _imageRightMargin = value;
+                OnPropertyChanged("ImageRightMargin");
+            }
+        }
+
+        public int ImageTopMargin
+        {
+            get { return _imageTopMargin; }
+            set
+            {
+                _imageTopMargin = value;
+                OnPropertyChanged("ImageTopMargin");
+            }
+        }
+
+        public int ImageBottomMargin
+        {
+            get { return _imageBottomMargin; }
+            set
+            {
+                _imageBottomMargin = value;
+                OnPropertyChanged("ImageBottomMargin");
+            }
+        }
+
+        public int PortraitHorizontalMargins
+        {
+            get { return _portraitHorizontalMargins; }
+            set
+            {
+                _portraitHorizontalMargins = value;
+                OnPropertyChanged("PortraitHorizontalMargins");
+            }
+        }
+
+        public int PortraitVerticalMargins
+        {
+            get { return _portraitVerticalMargins; }
+            set
+            {
+                _portraitVerticalMargins = value;
+                OnPropertyChanged("PortraitVerticalMargins");
+            }
+        }
 
         public MainWindow()
         {
@@ -27,6 +139,21 @@ namespace MafiaAutoName
             _dragManager = new ListViewDragDropManager<string>(NamesListView);
 
             _displayFont = new Font("Verdana", 20, System.Drawing.FontStyle.Bold);
+
+            ImageLeftMargin = 128;
+            ImageRightMargin = 128;
+            ImageTopMargin = 52;
+            ImageBottomMargin = 75;
+            PortraitHorizontalMargins = 20;
+            PortraitVerticalMargins = 20; 
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
 
         private void AddNameButton_OnClick(object sender, RoutedEventArgs e)
@@ -44,26 +171,19 @@ namespace MafiaAutoName
             var image = new Bitmap(InputImageLocationTextBox.Text);
             Graphics graphicImage = Graphics.FromImage(image);
 
-            const int rows = 4;
-            const int columns = 4;
-            const int imageLeftMargin = 128;
-            const int imageRightMargin = 128;
-            const int imageTopMargin = 52;
-            const int imageBottomMargin = 75;
-            const int portraitHorizontalMargins = 20;
-            const int portraitVerticalMargins = 20;
+                        
 
-            int portraitWidth = ((image.Width - imageLeftMargin - imageRightMargin) -
-                                 (columns - 1) * portraitHorizontalMargins) / columns;
-            int portraitHeight = ((image.Height - imageTopMargin - imageBottomMargin) -
-                                  (rows - 1) * portraitVerticalMargins) / rows;
+            int portraitWidth = ((image.Width - _imageLeftMargin - ImageRightMargin) -
+                                 (Columns - 1) * PortraitHorizontalMargins) / Columns;
+            int portraitHeight = ((image.Height - ImageTopMargin - ImageBottomMargin) -
+                                  (Rows - 1) * PortraitVerticalMargins) / Rows;
 
             int columnIndex = 0;
             int rowIndex = 0;
 
             for (int i = 0; i < Names.Count; i++)
             {
-                if (columnIndex + 1 > columns)
+                if (columnIndex + 1 > Columns)
                 {
                     rowIndex++;
                     columnIndex = 0;
@@ -71,36 +191,23 @@ namespace MafiaAutoName
 
                 SizeF size = graphicImage.MeasureString(Names[i], new Font("Verdana", 20, System.Drawing.FontStyle.Bold));
 
-                if (rowIndex + 1 < rows)
-                {
-                    graphicImage.DrawString(Names[i], _displayFont,
-                        new SolidBrush(Color.AntiqueWhite),
-                        new Point(
-                            columnIndex * portraitWidth + imageLeftMargin + (columnIndex * portraitHorizontalMargins) +
-                            portraitWidth -
-                            (int)size.Width,
-                            rowIndex * portraitHeight + imageTopMargin + (rowIndex * portraitVerticalMargins) + portraitHeight -
-                            (int)size.Height));
-
-                    columnIndex++;
-                }
-                else
+                int extraHorizontalMargin = 0;
+                if (rowIndex + 1 >= Rows)
                 {
                     // zoom.us will center portraits on last row unless there is only one missing then it will continue to follow grid pattern
-                    int extraHorizontalMargin = 0;
-                    if (rows * columns - Names.Count != 1)
-                        extraHorizontalMargin = (rows * columns - Names.Count) * (portraitWidth + portraitHorizontalMargins) / 2;
+                    if (Rows * Columns - Names.Count != 1)
+                        extraHorizontalMargin = (Rows * Columns - Names.Count) * (portraitWidth + PortraitHorizontalMargins) / 2;
+                }
 
-                    graphicImage.DrawString(Names[i], _displayFont,
+                graphicImage.DrawString(Names[i], _displayFont,
                         new SolidBrush(Color.AntiqueWhite),
                         new Point(
-                            columnIndex * portraitWidth + imageLeftMargin + (columnIndex * portraitHorizontalMargins) +
+                            columnIndex * portraitWidth + _imageLeftMargin + (columnIndex * PortraitHorizontalMargins) +
                             portraitWidth - (int)size.Width + extraHorizontalMargin,
-                            rowIndex * portraitHeight + imageTopMargin + (rowIndex * portraitVerticalMargins) + portraitHeight -
+                            rowIndex * portraitHeight + ImageTopMargin + (rowIndex * PortraitVerticalMargins) + portraitHeight -
                             (int)size.Height));
 
-                    columnIndex++;
-                }
+                columnIndex++;
             }
 
             image.Save(OutputImageLocationTextBox.Text, ImageFormat.Jpeg);
@@ -134,7 +241,7 @@ namespace MafiaAutoName
             var dialog = new OpenFileDialog {CheckFileExists = true, Filter = "JPEG (*.jpg)|*.jpg"};
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                InputImageLocationTextBox.Text = dialog.FileName;
+                InputImagePath = dialog.FileName;
 
             dialog.Dispose();
         }
@@ -144,7 +251,7 @@ namespace MafiaAutoName
             var dialog = new SaveFileDialog {DefaultExt = ".jpg", CheckPathExists = true};
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                OutputImageLocationTextBox.Text = dialog.FileName;
+                OutputImagePath = dialog.FileName;
 
             dialog.Dispose();
         }
