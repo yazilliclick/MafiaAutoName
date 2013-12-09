@@ -1,17 +1,51 @@
 ﻿<Window x:Class="MafiaAutoName.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="677" Width="525">
+        Title="Mafia Auto Name" Height="677" Width="525">
     <Grid>
-        <Button Name="GenerateButton" Content="_Generate" HorizontalAlignment="Left" Margin="215,258,0,0" VerticalAlignment="Top" Width="75" Click="GenerateButton_Click"/>
-        <ListView Name="NamesListView" HorizontalAlignment="Left" Height="215" Margin="14,38,0,0" VerticalAlignment="Top" Width="276">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
 
-        </ListView>
-        <TextBox Name="NewNameTextBox" HorizontalAlignment="Left" Height="23" Margin="13,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
-        <Button Name="AddNameButton" IsDefault="True" Content="_Add" HorizontalAlignment="Left" Margin="215,15,0,0" VerticalAlignment="Top" Width="75" Click="AddNameButton_OnClick"/>
-        <Button Name="RemoveButton" Content="Remove" HorizontalAlignment="Left" Margin="310,41,0,0" VerticalAlignment="Top" Width="75" Click="RemoveButton_Click"/>
-        <Button x:Name="RemoveButton_Copy" Content="Up" HorizontalAlignment="Left" Margin="310,66,0,0" VerticalAlignment="Top" Width="75" Click="RemoveButton_Click"/>
-        <Button x:Name="RemoveButton_Copy1" Content="Down" HorizontalAlignment="Left" Margin="310,91,0,0" VerticalAlignment="Top" Width="75" Click="RemoveButton_Click"/>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!-- Player name section -->
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <ListView Name="NamesListView" HorizontalAlignment="Left" Height="215" Margin="14,38,0,0" VerticalAlignment="Top" Width="276">
+            </ListView>
+            <TextBox Name="NewNameTextBox" HorizontalAlignment="Left" Height="23" Margin="13,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
+            <Button Name="AddNameButton" IsDefault="True" Content="_Add" HorizontalAlignment="Left" Margin="215,15,0,0" VerticalAlignment="Top" Width="75" Click="AddNameButton_OnClick"/>
+            <Button Name="RemoveButton" Content="Remove" HorizontalAlignment="Left" Margin="310,41,0,0" VerticalAlignment="Top" Width="75" Click="RemoveButton_Click"/>
+        </Grid>
+
+        <!-- Image margins section -->
+        <Grid Grid.Row="1" Grid.Column="0">
+
+        </Grid>
+
+        <!-- Portrait margins section -->
+        <Grid Grid.Row="1" Grid.Column="1">
+
+        </Grid>
+
+        <!-- Font and color settings -->
+        <Grid Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2">
+
+        </Grid>
+
+        <Button Name="GenerateButton" Content="_Generate" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="1"  Width="75" Height="23" Click="GenerateButton_Click"/>
+
+
+
+
+
+
         <Button x:Name="FontButton" Content="_Font..." HorizontalAlignment="Left" Margin="15,476,0,0" VerticalAlignment="Top" Width="75" Click="FontButton_Click"/>
         <TextBox x:Name="RowsTextBox" HorizontalAlignment="Left" Height="23" Margin="86,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="ColumnsTextBox" HorizontalAlignment="Left" Height="23" Margin="308,293,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
