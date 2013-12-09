@@ -13,29 +13,66 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <!-- Player name section -->
-        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <ListView Name="NamesListView" HorizontalAlignment="Left" Height="215" Margin="14,38,0,0" VerticalAlignment="Top" Width="276">
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox Name="NewNameTextBox" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="23" Width="200"/>
+            <Button Name="AddNameButton" IsDefault="True" Content="_Add" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="75" Height="23" Click="AddNameButton_OnClick"/>
+            
+            <ListView Name="NamesListView" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" Height="215">
             </ListView>
-            <TextBox Name="NewNameTextBox" HorizontalAlignment="Left" Height="23" Margin="13,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="196"/>
-            <Button Name="AddNameButton" IsDefault="True" Content="_Add" HorizontalAlignment="Left" Margin="215,15,0,0" VerticalAlignment="Top" Width="75" Click="AddNameButton_OnClick"/>
-            <Button Name="RemoveButton" Content="Remove" HorizontalAlignment="Left" Margin="310,41,0,0" VerticalAlignment="Top" Width="75" Click="RemoveButton_Click"/>
+            
+            
+            <Button Name="RemoveButton" Content="Remove" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="RemoveButton_Click"/>
+        </Grid>
+        
+        <!-- Rows and columns section-->
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            <Label x:Name="RowsLabel" Content="Rows:" HorizontalAlignment="Left" Margin="15,287,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="ColumnsLabel" Content="Columns:" HorizontalAlignment="Left" Margin="223,290,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="RowsTextBox" HorizontalAlignment="Left" Height="23" Margin="86,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="ColumnsTextBox" HorizontalAlignment="Left" Height="23" Margin="308,293,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         </Grid>
 
         <!-- Image margins section -->
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Label x:Name="ImageMarginTopLabel" Content="Top:" HorizontalAlignment="Left" Margin="15,351,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="ImageMarginsLabel" Content="Image Margins:" HorizontalAlignment="Left" Margin="15,324,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="ImageMarginBottomLabel" Content="Bottom:" HorizontalAlignment="Left" Margin="15,381,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="ImageMarginLeftLabel" Content="Left:" HorizontalAlignment="Left" Margin="15,413,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="ImageMarginRightLabel" Content="Right:" HorizontalAlignment="Left" Margin="15,445,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="ImageMarginTopTextBox" HorizontalAlignment="Left" Height="23" Margin="86,352,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="ImageMarginRightTextBox" HorizontalAlignment="Left" Height="23" Margin="86,446,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="ImageMarginBottomTextBox" HorizontalAlignment="Left" Height="23" Margin="86,383,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="ImageMarginLeftTextBox" HorizontalAlignment="Left" Height="23" Margin="86,414,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
         </Grid>
 
         <!-- Portrait margins section -->
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Label x:Name="PortraitSpacingLabel" Content="Portrait Spacing:" HorizontalAlignment="Left" Margin="223,324,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="PortraitSpacingLabel_Copy" Content="Vertical:" HorizontalAlignment="Left" Margin="223,351,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="PortraitSpacingHorizontalLabel" Content="Horizontal:" HorizontalAlignment="Left" Margin="223,383,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="PortraitSpacingVerticalLabel" HorizontalAlignment="Left" Height="23" Margin="308,356,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="PortraitSpacingHorizontalTextBox" HorizontalAlignment="Left" Height="23" Margin="308,386,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
         </Grid>
 
         <!-- Font and color settings -->
-        <Grid Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2">
+        <Grid Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2">
+            <Button x:Name="FontButton" Content="_Font..." HorizontalAlignment="Left" Margin="15,476,0,0" VerticalAlignment="Top" Width="75" Click="FontButton_Click"/>
 
         </Grid>
 
@@ -46,25 +83,13 @@
 
 
 
-        <Button x:Name="FontButton" Content="_Font..." HorizontalAlignment="Left" Margin="15,476,0,0" VerticalAlignment="Top" Width="75" Click="FontButton_Click"/>
-        <TextBox x:Name="RowsTextBox" HorizontalAlignment="Left" Height="23" Margin="86,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="ColumnsTextBox" HorizontalAlignment="Left" Height="23" Margin="308,293,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="ImageMarginTopTextBox" HorizontalAlignment="Left" Height="23" Margin="86,352,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="ImageMarginRightTextBox" HorizontalAlignment="Left" Height="23" Margin="86,446,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="ImageMarginBottomTextBox" HorizontalAlignment="Left" Height="23" Margin="86,383,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="ImageMarginLeftTextBox" HorizontalAlignment="Left" Height="23" Margin="86,414,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PortraitSpacingVerticalLabel" HorizontalAlignment="Left" Height="23" Margin="308,356,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="PortraitSpacingHorizontalTextBox" HorizontalAlignment="Left" Height="23" Margin="308,386,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="RowsLabel" Content="Rows:" HorizontalAlignment="Left" Margin="15,287,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="ColumnsLabel" Content="Columns:" HorizontalAlignment="Left" Margin="223,290,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="ImageMarginTopLabel" Content="Top:" HorizontalAlignment="Left" Margin="15,351,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="ImageMarginsLabel" Content="Image Margins:" HorizontalAlignment="Left" Margin="15,324,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="ImageMarginBottomLabel" Content="Bottom:" HorizontalAlignment="Left" Margin="15,381,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="ImageMarginLeftLabel" Content="Left:" HorizontalAlignment="Left" Margin="15,413,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="ImageMarginRightLabel" Content="Right:" HorizontalAlignment="Left" Margin="15,445,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="PortraitSpacingLabel" Content="Portrait Spacing:" HorizontalAlignment="Left" Margin="223,324,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="PortraitSpacingLabel_Copy" Content="Vertical:" HorizontalAlignment="Left" Margin="223,351,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="PortraitSpacingHorizontalLabel" Content="Horizontal:" HorizontalAlignment="Left" Margin="223,383,0,0" VerticalAlignment="Top"/>
+        
+        
+        
+       
+        
+        
+        
 
     </Grid>
 </Window>
