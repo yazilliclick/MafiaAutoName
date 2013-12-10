@@ -89,7 +89,10 @@
                     
                     <!-- Select input image or generate blank -->
                     <Grid Grid.Row="0" Grid.Column="0" ColumnSpan="2">
+                       
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
@@ -97,11 +100,26 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
+                                
+                        <RadioButton x:Name="InputImageRadioButton" IsChecked="True" Grid.Row="0" Grid.Column="0" GroupName="ExistingOrNewGroup" Content="Input Image:" />
+                        <TextBox x:Name="InputImageLocationTextBox" IsEnabled="{Binding ElementName=InputImageRadioButton, Path=IsChecked}" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Text="{Binding Path=InputImagePath}"/>
+                        <Button x:Name="InputImageLocationBrowseButton" IsEnabled="{Binding ElementName=InputImageRadioButton, Path=IsChecked}" Content="_Browse..." Grid.Row="1" Grid.Column="1" Click="InputImageLocationBrowseButton_Click"/>
                         
-                        <Label Content="Input Image:" Grid.Row="0" Grid.Column="0" />
-                        <TextBox x:Name="InputImageLocationTextBox" HorizontalAlignment="Stretch" Grid.Row="1" Grid.Column="0" Text="{Binding Path=InputImagePath}"/>
-                        <Button x:Name="InputImageLocationBrowseButton" Content="_Browse..." Grid.Row="1" Grid.Column="1" Click="InputImageLocationBrowseButton_Click"/>
-                        
+                        <RadioButton x:Name="GenerateImageRadioButton" Grid.Row="2" Grid.Column="0" GroupName="ExistingOrNewGroup" Content="Generate Image:"/>
+                        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Content="Horizontal" Grid.Column="0" IsEnabled="{Binding ElementName=GenerateImageRadioButton, Path=IsChecked}"/>
+                            <TextBox x:Name="NewImageHorizontalResolutionTextBox" Text="{Binding Path=NewImageHorizontalResolution}" Grid.Column="1" Width="120" IsEnabled="{Binding ElementName=GenerateImageRadioButton, Path=IsChecked}"/>
+                            <Label Content="Vertical" Grid.Column="2" IsEnabled="{Binding ElementName=GenerateImageRadioButton, Path=IsChecked}"/>
+                            <TextBox x:Name="NewImageVerticalResolutionTextBox" Text="{Binding Path=NewImageVerticalResolution}" Grid.Column="3" Width="120" IsEnabled="{Binding ElementName=GenerateImageRadioButton, Path=IsChecked}"/>
+
+                        </Grid>
                     </Grid>
                           
                     <!-- Select save location -->
@@ -187,7 +205,6 @@
 
         <Button Name="GenerateButton" Content="_Save" HorizontalAlignment="Right" Grid.Row="1"
                 Width="75" Click="GenerateButton_Click" />
-
-
+        
     </Grid>
 </Window>

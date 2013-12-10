@@ -27,6 +27,8 @@ namespace MafiaAutoName
         private int _imageBottomMargin;
         private int _portraitHorizontalMargins;
         private int _portraitVerticalMargins;
+        private int _newImageHorizontalResolution;
+        private int _newImageVerticalResolution;
 
         public string OutputImagePath
         {
@@ -128,6 +130,26 @@ namespace MafiaAutoName
             }
         }
 
+        public int NewImageHorizontalResolution
+        {
+            get { return _newImageHorizontalResolution; }
+            set
+            {
+                _newImageHorizontalResolution = value;
+                OnPropertyChanged("NewImageHorizontalResolution");
+            }
+        }
+
+        public int NewImageVerticalResolution
+        {
+            get { return _newImageVerticalResolution; }
+            set
+            {
+                _newImageVerticalResolution = value;
+                OnPropertyChanged("NewImageVerticalResolution");
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -145,7 +167,9 @@ namespace MafiaAutoName
             ImageTopMargin = 52;
             ImageBottomMargin = 75;
             PortraitHorizontalMargins = 20;
-            PortraitVerticalMargins = 20; 
+            PortraitVerticalMargins = 20;
+            NewImageHorizontalResolution = 1920;
+            NewImageVerticalResolution = 1080;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -168,10 +192,19 @@ namespace MafiaAutoName
 
         private void GenerateButton_Click(object sender, RoutedEventArgs e)
         {
-            var image = new Bitmap(InputImageLocationTextBox.Text);
-            Graphics graphicImage = Graphics.FromImage(image);
+            Bitmap image;
+            Graphics graphicImage;
 
-                        
+            if (InputImageRadioButton.IsChecked.GetValueOrDefault())
+            {
+                image = new Bitmap(_inputImagePath);
+                graphicImage = Graphics.FromImage(image);
+            }
+            else
+            {
+                image = new Bitmap(NewImageHorizontalResolution, NewImageVerticalResolution);
+                graphicImage = Graphics.FromImage(image);
+            }
 
             int portraitWidth = ((image.Width - _imageLeftMargin - ImageRightMargin) -
                                  (Columns - 1) * PortraitHorizontalMargins) / Columns;
@@ -194,7 +227,6 @@ namespace MafiaAutoName
                 int extraHorizontalMargin = 0;
                 if (rowIndex + 1 >= Rows)
                 {
-                    // zoom.us will center portraits on last row unless there is only one missing then it will continue to follow grid pattern
                     if (Rows * Columns - Names.Count != 1)
                         extraHorizontalMargin = (Rows * Columns - Names.Count) * (portraitWidth + PortraitHorizontalMargins) / 2;
                 }
@@ -209,8 +241,8 @@ namespace MafiaAutoName
 
                 columnIndex++;
             }
-
-            image.Save(OutputImageLocationTextBox.Text, ImageFormat.Jpeg);
+            
+            image.Save(_outputFilePath, ImageFormat.Png);
 
             image.Dispose();
             graphicImage.Dispose();
@@ -238,7 +270,7 @@ namespace MafiaAutoName
 
         private void InputImageLocationBrowseButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog {CheckFileExists = true, Filter = "JPEG (*.jpg)|*.jpg"};
+            var dialog = new OpenFileDialog {CheckFileExists = true, Filter = @"PNG (*.png)|*.png"};
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 InputImagePath = dialog.FileName;
@@ -248,7 +280,7 @@ namespace MafiaAutoName
 
         private void OutputImageLocationBrowseButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new SaveFileDialog {DefaultExt = ".jpg", CheckPathExists = true};
+            var dialog = new SaveFileDialog {DefaultExt = ".png", CheckPathExists = true, Filter = @"PNG (*.png)|*.png"};
 
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 OutputImagePath = dialog.FileName;
