@@ -4,9 +4,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Printing;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
+using MessageBox = System.Windows.MessageBox;
 using Point = System.Drawing.Point;
 
 namespace MafiaAutoName
@@ -29,7 +31,7 @@ namespace MafiaAutoName
         private int _portraitVerticalMargins;
         private int _newImageHorizontalResolution;
         private int _newImageVerticalResolution;
-
+        
         public string OutputImagePath
         {
             get { return _outputFilePath;  }
@@ -192,60 +194,67 @@ namespace MafiaAutoName
 
         private void GenerateButton_Click(object sender, RoutedEventArgs e)
         {
-            Bitmap image;
-            Graphics graphicImage;
-
-            if (InputImageRadioButton.IsChecked.GetValueOrDefault())
+            try
             {
-                image = new Bitmap(_inputImagePath);
-                graphicImage = Graphics.FromImage(image);
-            }
-            else
-            {
-                image = new Bitmap(NewImageHorizontalResolution, NewImageVerticalResolution);
-                graphicImage = Graphics.FromImage(image);
-            }
+                Bitmap image;
+                Graphics graphicImage;
 
-            int portraitWidth = ((image.Width - _imageLeftMargin - ImageRightMargin) -
-                                 (Columns - 1) * PortraitHorizontalMargins) / Columns;
-            int portraitHeight = ((image.Height - ImageTopMargin - ImageBottomMargin) -
-                                  (Rows - 1) * PortraitVerticalMargins) / Rows;
-
-            int columnIndex = 0;
-            int rowIndex = 0;
-
-            for (int i = 0; i < Names.Count; i++)
-            {
-                if (columnIndex + 1 > Columns)
+                if (InputImageRadioButton.IsChecked.GetValueOrDefault())
                 {
-                    rowIndex++;
-                    columnIndex = 0;
+                    image = new Bitmap(_inputImagePath);
+                    graphicImage = Graphics.FromImage(image);
+                }
+                else
+                {
+                    image = new Bitmap(NewImageHorizontalResolution, NewImageVerticalResolution);
+                    graphicImage = Graphics.FromImage(image);
                 }
 
-                SizeF size = graphicImage.MeasureString(Names[i], new Font("Verdana", 20, System.Drawing.FontStyle.Bold));
+                int portraitWidth = ((image.Width - _imageLeftMargin - ImageRightMargin) -
+                                     (Columns - 1) * PortraitHorizontalMargins) / Columns;
+                int portraitHeight = ((image.Height - ImageTopMargin - ImageBottomMargin) -
+                                      (Rows - 1) * PortraitVerticalMargins) / Rows;
 
-                int extraHorizontalMargin = 0;
-                if (rowIndex + 1 >= Rows)
+                int columnIndex = 0;
+                int rowIndex = 0;
+
+                for (int i = 0; i < Names.Count; i++)
                 {
-                    if (Rows * Columns - Names.Count != 1)
-                        extraHorizontalMargin = (Rows * Columns - Names.Count) * (portraitWidth + PortraitHorizontalMargins) / 2;
+                    if (columnIndex + 1 > Columns)
+                    {
+                        rowIndex++;
+                        columnIndex = 0;
+                    }
+
+                    SizeF size = graphicImage.MeasureString(Names[i], new Font("Verdana", 20, System.Drawing.FontStyle.Bold));
+
+                    int extraHorizontalMargin = 0;
+                    if (rowIndex + 1 >= Rows)
+                    {
+                        if (Rows * Columns - Names.Count != 1)
+                            extraHorizontalMargin = (Rows * Columns - Names.Count) * (portraitWidth + PortraitHorizontalMargins) / 2;
+                    }
+
+                    graphicImage.DrawString(Names[i], _displayFont,
+                            new SolidBrush(Color.AntiqueWhite),
+                            new Point(
+                                columnIndex * portraitWidth + _imageLeftMargin + (columnIndex * PortraitHorizontalMargins) +
+                                portraitWidth - (int)size.Width + extraHorizontalMargin,
+                                rowIndex * portraitHeight + ImageTopMargin + (rowIndex * PortraitVerticalMargins) + portraitHeight -
+                                (int)size.Height));
+
+                    columnIndex++;
                 }
 
-                graphicImage.DrawString(Names[i], _displayFont,
-                        new SolidBrush(Color.AntiqueWhite),
-                        new Point(
-                            columnIndex * portraitWidth + _imageLeftMargin + (columnIndex * PortraitHorizontalMargins) +
-                            portraitWidth - (int)size.Width + extraHorizontalMargin,
-                            rowIndex * portraitHeight + ImageTopMargin + (rowIndex * PortraitVerticalMargins) + portraitHeight -
-                            (int)size.Height));
+                image.Save(_outputFilePath, ImageFormat.Png);
 
-                columnIndex++;
+                image.Dispose();
+                graphicImage.Dispose();
             }
-            
-            image.Save(_outputFilePath, ImageFormat.Png);
-
-            image.Dispose();
-            graphicImage.Dispose();
+            catch (Exception exception)
+            {
+                MessageBox.Show("Error encountered", "Error encountere", MessageBoxButton.OK);
+            }
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
