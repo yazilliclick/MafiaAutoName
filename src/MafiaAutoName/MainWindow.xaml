@@ -200,7 +200,7 @@
                                 VerticalAlignment="Top"
                                 Width="75" Click="FontButton_Click" />
                             
-                            <xctk:ColorPicker x:Name="ColorPickerCh" DisplayColorAndName="True" SelectedColor="{Binding FontColor}" Width="160" Height="20" Margin="5"/>
+                            <xctk:ColorPicker x:Name="ColorPickerCh" DisplayColorAndName="False" SelectedColor="{Binding FontColor}" Width="160" Height="20" Margin="5"/>
                         </StackPanel>
                         
                     </Grid>
