@@ -16,26 +16,57 @@ namespace MafiaAutoName
     public partial class MainWindow : INotifyPropertyChanged
     {
         protected IList<String> Names;
-        [UsedImplicitly] private ListViewDragDropManager<String> _dragManager;
-        private Font _displayFont;
-
-        private string _outputFilePath;
-        private string _inputImagePath;
-        private int _rows;
         private int _columns;
+        private Font _displayFont;
+        [UsedImplicitly] private ListViewDragDropManager<String> _dragManager;
+        private Color _fontColor;
+        private int _imageBottomMargin;
         private int _imageLeftMargin;
         private int _imageRightMargin;
         private int _imageTopMargin;
-        private int _imageBottomMargin;
-        private int _portraitHorizontalMargins;
-        private int _portraitVerticalMargins;
+        private string _inputImagePath;
         private int _newImageHorizontalResolution;
         private int _newImageVerticalResolution;
-        private Color _fontColor;
+        private string _outputFilePath;
+        private int _portraitHorizontalMargins;
+        private int _portraitVerticalMargins;
+        private int _rows;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            Names = new ObservableCollection<string>();
+            NamesListView.ItemsSource = Names;
+            NewNameTextBox.Focus();
+
+            _dragManager = new ListViewDragDropManager<string>(NamesListView);
+
+            _displayFont = Settings.Default.DisplayFont;
+            _fontColor = Settings.Default.FontColor;
+            OnPropertyChanged("FontColor");
+
+            ImageLeftMargin = Settings.Default.ImageLeftMargin;
+            ImageRightMargin = Settings.Default.ImageRightMargin;
+            ImageTopMargin = Settings.Default.ImageTopMargin;
+            ImageBottomMargin = Settings.Default.ImageBottomMargin;
+            PortraitHorizontalMargins = Settings.Default.PortraitHorizontalMargin;
+            PortraitVerticalMargins = Settings.Default.PortraitVerticalMargin;
+            NewImageHorizontalResolution = Settings.Default.NewImageHorizontalResolution;
+            NewImageVerticalResolution = Settings.Default.NewImageVerticalResolution;
+
+            InputImageRadioButton.IsChecked = Settings.Default.UseInputImage;
+            GenerateImageRadioButton.IsChecked = !Settings.Default.UseInputImage;
+
+            InputImagePath = Settings.Default.InputImagePath;
+            OutputImagePath = Settings.Default.OutputImagePath;
+
+            Closing += MainWindow_Closing;
+        }
 
         public string OutputImagePath
         {
-            get { return _outputFilePath;  }
+            get { return _outputFilePath; }
             set
             {
                 _outputFilePath = value;
@@ -155,10 +186,7 @@ namespace MafiaAutoName
 
         public System.Windows.Media.Color FontColor
         {
-            get
-            {
-                return System.Windows.Media.Color.FromArgb(_fontColor.A, _fontColor.R, _fontColor.G, _fontColor.B);
-            }
+            get { return System.Windows.Media.Color.FromArgb(_fontColor.A, _fontColor.R, _fontColor.G, _fontColor.B); }
             set
             {
                 _fontColor = Color.FromArgb(value.A, value.R, value.G, value.B);
@@ -166,42 +194,12 @@ namespace MafiaAutoName
             }
         }
 
-        public MainWindow()
-        {
-            InitializeComponent();
+        public event PropertyChangedEventHandler PropertyChanged;
 
-            Names = new ObservableCollection<string>();
-            NamesListView.ItemsSource = Names;
-            NewNameTextBox.Focus();
-
-            _dragManager = new ListViewDragDropManager<string>(NamesListView);
-
-            _displayFont = Settings.Default.DisplayFont;
-            _fontColor = Settings.Default.FontColor;
-            OnPropertyChanged("FontColor");
-
-            ImageLeftMargin = Settings.Default.ImageLeftMargin;
-            ImageRightMargin = Settings.Default.ImageRightMargin;
-            ImageTopMargin = Settings.Default.ImageTopMargin;
-            ImageBottomMargin = Settings.Default.ImageBottomMargin;
-            PortraitHorizontalMargins = Settings.Default.PortraitHorizontalMargin;
-            PortraitVerticalMargins = Settings.Default.PortraitVerticalMargin;
-            NewImageHorizontalResolution = Settings.Default.NewImageHorizontalResolution;
-            NewImageVerticalResolution = Settings.Default.NewImageVerticalResolution;
-
-            InputImageRadioButton.IsChecked = Settings.Default.UseInputImage;
-            GenerateImageRadioButton.IsChecked = !Settings.Default.UseInputImage;
-
-            InputImagePath = Settings.Default.InputImagePath;
-            OutputImagePath = Settings.Default.OutputImagePath;
-
-            Closing += MainWindow_Closing;
-        }
-
-        void MainWindow_Closing(object sender, CancelEventArgs e)
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             Settings.Default.FontColor = _fontColor;
-
+            
             Settings.Default.ImageLeftMargin = _imageLeftMargin;
             Settings.Default.ImageRightMargin = _imageRightMargin;
             Settings.Default.ImageTopMargin = _imageTopMargin;
@@ -216,8 +214,6 @@ namespace MafiaAutoName
 
             Settings.Default.Save();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string name)
         {
@@ -239,26 +235,18 @@ namespace MafiaAutoName
         {
             try
             {
-                Bitmap image;
-                Graphics graphicImage;
+                Bitmap image = InputImageRadioButton.IsChecked.GetValueOrDefault()
+                    ? new Bitmap(_inputImagePath)
+                    : new Bitmap(NewImageHorizontalResolution, NewImageVerticalResolution);
 
-                if (InputImageRadioButton.IsChecked.GetValueOrDefault())
-                {
-                    image = new Bitmap(_inputImagePath);
-                    graphicImage = Graphics.FromImage(image);
-                }
-                else
-                {
-                    image = new Bitmap(NewImageHorizontalResolution, NewImageVerticalResolution);
-                    graphicImage = Graphics.FromImage(image);
-                }
-                
+                Graphics graphicImage = Graphics.FromImage(image);
+
+
                 int portraitWidth = ((image.Width - _imageLeftMargin - ImageRightMargin) -
-                                     (Columns - 1) * PortraitHorizontalMargins) / Columns;
+                                     (Columns - 1)*PortraitHorizontalMargins)/Columns;
                 int portraitHeight = ((image.Height - ImageTopMargin - ImageBottomMargin) -
-                                      (Rows - 1) * PortraitVerticalMargins) / Rows;
+                                      (Rows - 1)*PortraitVerticalMargins)/Rows;
 
-                
                 int columnIndex = 0;
                 int rowIndex = 0;
 
@@ -270,22 +258,24 @@ namespace MafiaAutoName
                         columnIndex = 0;
                     }
 
-                    SizeF size = graphicImage.MeasureString(name, new Font("Verdana", 20, System.Drawing.FontStyle.Bold));
+                    SizeF size = graphicImage.MeasureString(name, _displayFont);
 
                     int extraHorizontalMargin = 0;
                     if (rowIndex + 1 >= Rows)
                     {
-                        if (Rows * Columns - Names.Count != 1)
-                            extraHorizontalMargin = (Rows * Columns - Names.Count) * (portraitWidth + PortraitHorizontalMargins) / 2;
+                        if (Rows*Columns - Names.Count != 1)
+                            extraHorizontalMargin = (Rows*Columns - Names.Count)*
+                                                    (portraitWidth + PortraitHorizontalMargins)/2;
                     }
 
                     graphicImage.DrawString(name, _displayFont,
                         new SolidBrush(_fontColor),
                         new Point(
-                            columnIndex * portraitWidth + _imageLeftMargin + (columnIndex * PortraitHorizontalMargins) +
-                            portraitWidth - (int)size.Width + extraHorizontalMargin,
-                            rowIndex * portraitHeight + ImageTopMargin + (rowIndex * PortraitVerticalMargins) + portraitHeight -
-                            (int)size.Height));
+                            columnIndex*portraitWidth + _imageLeftMargin + (columnIndex*PortraitHorizontalMargins) +
+                            portraitWidth - (int) size.Width + extraHorizontalMargin,
+                            rowIndex*portraitHeight + ImageTopMargin + (rowIndex*PortraitVerticalMargins) +
+                            portraitHeight -
+                            (int) size.Height));
 
                     columnIndex++;
                 }
@@ -305,7 +295,7 @@ namespace MafiaAutoName
         {
             if (NamesListView.SelectedItem != null)
             {
-                Names.Remove((String)NamesListView.SelectedValue);
+                Names.Remove((String) NamesListView.SelectedValue);
             }
         }
 
@@ -313,8 +303,7 @@ namespace MafiaAutoName
         {
             var fd = new FontDialog {Font = _displayFont};
 
-            DialogResult dr = fd.ShowDialog();
-            if (dr != System.Windows.Forms.DialogResult.Cancel)
+            if (fd.ShowDialog() != System.Windows.Forms.DialogResult.Cancel)
             {
                 _displayFont = fd.Font;
             }
