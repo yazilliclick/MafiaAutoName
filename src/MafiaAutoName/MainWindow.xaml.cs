@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Printing;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
@@ -31,7 +29,8 @@ namespace MafiaAutoName
         private int _portraitVerticalMargins;
         private int _newImageHorizontalResolution;
         private int _newImageVerticalResolution;
-        
+        private Color _fontColor;
+
         public string OutputImagePath
         {
             get { return _outputFilePath;  }
@@ -152,6 +151,19 @@ namespace MafiaAutoName
             }
         }
 
+        public System.Windows.Media.Color FontColor
+        {
+            get
+            {
+                return System.Windows.Media.Color.FromArgb(_fontColor.A, _fontColor.R, _fontColor.G, _fontColor.B);
+            }
+            set
+            {
+                _fontColor = Color.FromArgb(value.A, value.R, value.G, value.B);
+                OnPropertyChanged("FontColor");
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -163,6 +175,7 @@ namespace MafiaAutoName
             _dragManager = new ListViewDragDropManager<string>(NamesListView);
 
             _displayFont = new Font("Verdana", 20, System.Drawing.FontStyle.Bold);
+            _fontColor = Color.AntiqueWhite;
 
             ImageLeftMargin = 128;
             ImageRightMargin = 128;
@@ -209,12 +222,13 @@ namespace MafiaAutoName
                     image = new Bitmap(NewImageHorizontalResolution, NewImageVerticalResolution);
                     graphicImage = Graphics.FromImage(image);
                 }
-
+                
                 int portraitWidth = ((image.Width - _imageLeftMargin - ImageRightMargin) -
                                      (Columns - 1) * PortraitHorizontalMargins) / Columns;
                 int portraitHeight = ((image.Height - ImageTopMargin - ImageBottomMargin) -
                                       (Rows - 1) * PortraitVerticalMargins) / Rows;
 
+                
                 int columnIndex = 0;
                 int rowIndex = 0;
 
@@ -236,7 +250,7 @@ namespace MafiaAutoName
                     }
 
                     graphicImage.DrawString(Names[i], _displayFont,
-                            new SolidBrush(Color.AntiqueWhite),
+                            new SolidBrush(_fontColor),
                             new Point(
                                 columnIndex * portraitWidth + _imageLeftMargin + (columnIndex * PortraitHorizontalMargins) +
                                 portraitWidth - (int)size.Width + extraHorizontalMargin,
@@ -267,10 +281,9 @@ namespace MafiaAutoName
 
         private void FontButton_Click(object sender, RoutedEventArgs e)
         {
-            var fd = new FontDialog();
-            fd.Font = _displayFont;
+            var fd = new FontDialog {Font = _displayFont};
 
-            System.Windows.Forms.DialogResult dr = fd.ShowDialog();
+            DialogResult dr = fd.ShowDialog();
             if (dr != System.Windows.Forms.DialogResult.Cancel)
             {
                 _displayFont = fd.Font;
