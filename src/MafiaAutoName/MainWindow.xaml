@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="Mafia Auto Name" Height="677" Width="525" Background="Bisque" 
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}" Icon="MafiaAutoName.ico">
 
     <Window.Resources>
         <Style TargetType="TextBox">
